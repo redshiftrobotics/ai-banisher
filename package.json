@@ -1,0 +1,42 @@
+{
+  "name": "ai-banisher",
+  "displayName": "AI Banisher 3000",
+  "description": "We banish the AI",
+  "version": "1.0.0",
+  "author": "Owen Z. Siebers",
+  "publisher": "ozs",
+  "engines": {
+    "vscode": "^1.140.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "repository": "https://www.youtube.com/watch?v=oHg5SJYRHA0",
+  "contributes": {},
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "minify": "esbuild out/extension.js --minify --outfile=out/extension.min.js",
+    "obfuscate": "javascript-obfuscator out/extension.min.js --output out/extension.js",
+    "build": "pnpm run compile && pnpm run minify && pnpm run obfuscate && rm out/extension.min.js",
+    "package": "pnpm run build && rm -rvf dist && mkdir -p dist && cp README.md dist && cp package.json dist && cp pnpm-lock.yaml dist && cp LICENSE dist/LICENSE.txt && mkdir -p dist/out && cp out/extension.js dist/out"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "24.x",
+    "@types/vscode": "^1.140.0",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.0.0",
+    "esbuild": "^0.28.2",
+    "javascript-obfuscator": "^5.9.0",
+    "typescript": "^6.0.3"
+  },
+  "overrides": {
+    "diff": "^8.0.4",
+    "serialize-javascript": "^7.0.6"
+  }
+}
