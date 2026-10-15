@@ -1,2 +1,105 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System.IO.Compression;
+
+string? codePath = args.ElementAtOrDefault(1);
+string? downloadPath = args.ElementAtOrDefault(2);
+
+Stream? downloaded = null;
+
+void ErrorOut(string message)
+{
+    Console.Error.WriteLine(message);
+    Console.ResetColor();
+
+    Environment.Exit(0);
+}
+
+void Help()
+{
+    Console.WriteLine($"{args[0]} [path-to-vscode-folder] [extension-url]");
+
+    Environment.Exit(0);
+}
+
+bool TryFindVsCodePath(out string codePath)
+{
+    string[][] paths = [
+        ["Users", "Public", "wpilib", "2027_alpha7", "vscode"],     
+        [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "wpilib", "2027_alpha7", "vscode"],        
+        [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share", "wpilib", "2027_alpha7", "vscode", "VSCode-linux-x64"]
+    ];
+
+    var joins = paths.Select(path => Path.GetFullPath(Path.Join(path))).ToList();
+
+    joins.ForEach(Console.WriteLine);
+
+    codePath = joins.FirstOrDefault(path => Directory.Exists(path)) ?? string.Empty;
+
+    Console.WriteLine("L:" + codePath);
+
+    return codePath != string.Empty;
+}
+
+bool TryDownload(out Stream download)
+{
+    if (downloadPath is null)
+    {
+        download = null!;
+        return false;
+    }
+
+    using HttpClient httpClient = new();
+
+    Task<Stream> downloadTask = httpClient.GetStreamAsync(downloadPath);
+
+    downloadTask.RunSynchronously();
+
+    download = downloadTask.Result;
+    return true;
+}
+
+if (args.ElementAtOrDefault(1)?.Contains("help") == true || args.ElementAtOrDefault(1)?.StartsWith("-h") == true)
+{
+    Help();
+    return;
+}
+
+if (codePath is null && !TryFindVsCodePath(out codePath))
+{
+    ErrorOut("VS Code can't be found or isn't installed.");
+    Help();
+}
+else if (downloadPath is null && !TryDownload(out downloaded))
+{
+    ErrorOut("Failed to download the extension.");
+    Help();
+}
+else
+{
+    try
+    {
+        if (downloadPath is not null)
+        {
+            downloaded = File.OpenRead(downloadPath);
+        }
+
+        if (downloaded is null)
+        {
+            ErrorOut("No download stream");
+            return;
+        }
+
+        using ZipArchive zipArchive = new(downloaded);
+
+        string extensionDestinationFolderPath = Path.Join(codePath, "resources/", "app/", "extensions/", "8032-ai");
+
+        Directory.CreateDirectory(extensionDestinationFolderPath);
+
+        zipArchive.ExtractToDirectory(extensionDestinationFolderPath);
+
+        Console.WriteLine("Installed! :)");
+    }
+    catch (Exception e)
+    {
+        ErrorOut(e.Message);
+    }
+}
