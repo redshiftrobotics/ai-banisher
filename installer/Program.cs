@@ -15,7 +15,7 @@ void ErrorOut(string message)
 
 void Help()
 {
-    Console.WriteLine($"{args[0]} [path-to-vscode-folder] [extension-url]");
+    Console.WriteLine($"{args[0]} [path-to-vscode-folder] [extension-file-path]");
 
     Environment.Exit(0);
 }
@@ -23,8 +23,8 @@ void Help()
 bool TryFindVsCodePath(out string codePath)
 {
     string[][] paths = [
-        ["/Users", "Public", "wpilib", "2027_alpha7", "vscode"],     
-        [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "wpilib", "2027_alpha7", "vscode"],        
+        ["/Users", "Public", "wpilib", "2027_alpha7", "vscode"],
+        [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "wpilib", "2027_alpha7", "vscode"],
         [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share", "wpilib", "2027_alpha7", "vscode", "VSCode-linux-x64"]
     ];
 
@@ -35,17 +35,11 @@ bool TryFindVsCodePath(out string codePath)
 
 bool TryDownload(out Stream download)
 {
-    if (downloadPath is null)
-    {
-        download = null!;
-        return false;
-    }
-
     using HttpClient httpClient = new();
+    httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0");
 
-    Task<Stream> downloadTask = httpClient.GetStreamAsync(downloadPath);
-
-    downloadTask.RunSynchronously();
+    Task<Stream> downloadTask = httpClient.GetStreamAsync("https://github.com/RobotLeopard86/AI-BANISHER-3000/archive/refs/heads/main.zip"); // TODO make this URL point to a release
+    downloadTask.Wait();
 
     download = downloadTask.Result;
     return true;
@@ -94,6 +88,6 @@ else
     }
     catch (Exception e)
     {
-        ErrorOut(e.Message);
+        ErrorOut(e.ToString());
     }
 }
