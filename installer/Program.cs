@@ -23,18 +23,12 @@ void Help()
 bool TryFindVsCodePath(out string codePath)
 {
     string[][] paths = [
-        ["Users", "Public", "wpilib", "2027_alpha7", "vscode"],     
+        ["/Users", "Public", "wpilib", "2027_alpha7", "vscode"],     
         [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "wpilib", "2027_alpha7", "vscode"],        
         [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share", "wpilib", "2027_alpha7", "vscode", "VSCode-linux-x64"]
     ];
 
-    var joins = paths.Select(path => Path.GetFullPath(Path.Join(path))).ToList();
-
-    joins.ForEach(Console.WriteLine);
-
-    codePath = joins.FirstOrDefault(path => Directory.Exists(path)) ?? string.Empty;
-
-    Console.WriteLine("L:" + codePath);
+    codePath = paths.Select(path => Path.GetFullPath(Path.Join(path))).FirstOrDefault(path => Directory.Exists(path)) ?? string.Empty;
 
     return codePath != string.Empty;
 }
