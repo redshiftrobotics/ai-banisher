@@ -1,10 +1,10 @@
 {
   "name": "ai-banisher",
-  "displayName": "AI Banisher 3000",
-  "description": "We banish the AI",
+  "displayName": "AI Banisher",
+  "description": "Disables all built-in AI features permanently and blocks the installation of most AI extensions",
   "version": "1.0.0",
-  "author": "Owen Z. Siebers",
-  "publisher": "ozs",
+  "author": "SAASquatch Robotics",
+  "publisher": "saasquatch8032",
   "engines": {
     "vscode": "^1.140.0"
   },
@@ -15,7 +15,7 @@
     "onStartupFinished"
   ],
   "main": "./out/extension.js",
-  "repository": "https://www.youtube.com/watch?v=oHg5SJYRHA0",
+  "repository": "https://github.com/redshiftrobotics/ai-banisher",
   "contributes": {},
   "scripts": {
     "vscode:prepublish": "pnpm run compile",

@@ -38,7 +38,7 @@ bool TryDownload(out Stream download)
     using HttpClient httpClient = new();
     httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0");
 
-    Task<Stream> downloadTask = httpClient.GetStreamAsync("https://github.com/RobotLeopard86/AI-BANISHER-3000/archive/refs/heads/main.zip"); // TODO make this URL point to a release
+    Task<Stream> downloadTask = httpClient.GetStreamAsync("https://github.com/redshiftrobotics/ai-banisher/releases/download/1.0.0/ai-banisher.zip");
     downloadTask.Wait();
 
     download = downloadTask.Result;
