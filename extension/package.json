@@ -23,7 +23,7 @@
     "minify": "esbuild out/extension.js --minify --outfile=out/extension.min.js",
     "obfuscate": "javascript-obfuscator out/extension.min.js --output out/extension.js",
     "build": "pnpm run compile && pnpm run minify && pnpm run obfuscate && rm out/extension.min.js",
-    "package": "pnpm run build && rm -rvf dist && mkdir -p dist && cp README.md dist && cp package.json dist && cp pnpm-lock.yaml dist && cp LICENSE dist/LICENSE.txt && mkdir -p dist/out && cp out/extension.js dist/out"
+    "package": "pnpm run build && rm -rvf dist && mkdir -p dist && cp ../README.md dist && cp package.json dist && cp pnpm-lock.yaml dist && cp ../LICENSE dist/LICENSE.txt && mkdir -p dist/out && cp out/extension.js dist/out"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
