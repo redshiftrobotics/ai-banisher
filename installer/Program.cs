@@ -24,7 +24,7 @@ bool TryFindVsCodePath(out string codePath)
 {
     string[][] paths = [
         ["/Users", "Public", "wpilib", "2027_alpha7", "vscode"],
-        [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "wpilib", "2027_alpha7", "vscode"],
+        [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "wpilib", "2027_alpha7", "vscode", "VSCode-win-x64"],
         [Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share", "wpilib", "2027_alpha7", "vscode", "VSCode-linux-x64"]
     ];
 
